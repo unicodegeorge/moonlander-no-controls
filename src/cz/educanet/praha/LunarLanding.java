@@ -6,19 +6,19 @@ public class LunarLanding {
     private static final int FUEL_POWER = 40;
     private static final int G = 500;
 
-    private final ILanderControls controls;
+    private final LanderControls controls;
     private int altitude;
     private int velocity;
 
-    public LunarLanding(ILanderControls controls, int altitude, int velocity) {
+    public LunarLanding(LanderControls controls, int altitude, int velocity) {
         Objects.requireNonNull(controls);
         this.controls = controls;
 
         if (altitude < 0) throw new IllegalArgumentException("Altitude should be non-negative");
         this.altitude = altitude;
-
         this.velocity = velocity;
     }
+    
 
     public int land() {
         int totalFuelBurnt = 0;
@@ -30,7 +30,7 @@ public class LunarLanding {
             }
 
             int fuel = controls.getSecondsOfFuelBurn(altitude, velocity);
-            if (fuel < 0) fuel = 0; // TODO throw exception
+            if (fuel < 0) throw new IllegalArgumentException("Negative fuel");
             totalFuelBurnt += fuel;
             velocity -= (fuel * FUEL_POWER) - G;
             altitude -= velocity;
